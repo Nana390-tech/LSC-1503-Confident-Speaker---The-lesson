@@ -1,0 +1,1865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LSC 1503 · The Confident Speaker</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600;1,700&family=Crimson+Pro:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ── ROOT VARIABLES ───────────────────────────── */
+:root {
+  --navy: #0d1b2a;
+  --navy-mid: #1a2e42;
+  --crimson: #c0303f;
+  --crimson-light: #e05566;
+  --rose: #f7e8ea;
+  --rose-mid: #f2d0d5;
+  --cream: #fdf9f6;
+  --cream-dark: #f5ede8;
+  --text: #1c2b3a;
+  --text-light: #5a6a7a;
+  --white: #ffffff;
+  --gold: #c9973a;
+  --green: #2d7a4f;
+  --shadow: 0 4px 24px rgba(13,27,42,0.10);
+  --shadow-lg: 0 12px 48px rgba(13,27,42,0.15);
+  --border: rgba(13,27,42,0.08);
+}
+ 
+/* ── RESET ───────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+ 
+/* ── HEADER ──────────────────────────────────── */
+.header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: var(--navy);
+  padding: 0 2rem;
+  height: 60px;
+  display: flex; align-items: center; justify-content: space-between;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.25);
+}
+.header-brand { display: flex; align-items: center; gap: 1rem; }
+.header-code {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.1rem;
+  color: var(--white);
+  letter-spacing: 0.02em;
+}
+.header-sep { width: 1px; height: 20px; background: rgba(255,255,255,0.2); }
+.header-title {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.header-right { display: flex; align-items: center; gap: 1.5rem; }
+.mastery-pill {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 20px;
+  padding: 0.3rem 0.9rem;
+}
+.mastery-label { font-size: 0.65rem; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.1em; }
+.mastery-val { font-size: 0.9rem; font-weight: 600; color: var(--crimson-light); }
+.nav-toggle {
+  background: none; border: none; cursor: pointer;
+  display: flex; flex-direction: column; gap: 5px; padding: 4px;
+}
+.nav-toggle span { display: block; width: 22px; height: 2px; background: rgba(255,255,255,0.6); border-radius: 2px; transition: 0.3s; }
+ 
+/* ── SIDE DRAWER NAV ─────────────────────────── */
+.drawer {
+  position: fixed; top: 60px; right: 0; bottom: 0; z-index: 90;
+  width: 280px;
+  background: var(--navy);
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  overflow-y: auto;
+  padding: 2rem 1.5rem;
+  box-shadow: -8px 0 32px rgba(0,0,0,0.3);
+}
+.drawer.open { transform: translateX(0); }
+.drawer-title { font-size: 0.65rem; color: rgba(255,255,255,0.35); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 1.5rem; }
+.nav-item {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-bottom: 0.25rem;
+  text-decoration: none;
+  color: rgba(255,255,255,0.6);
+  font-size: 0.85rem;
+  user-select: none;
+}
+.nav-item:hover { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.9); }
+.nav-item.active { background: rgba(192,48,63,0.2); color: var(--crimson-light); }
+.nav-dot {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.2);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.65rem; font-weight: 700; flex-shrink: 0;
+  color: rgba(255,255,255,0.4);
+}
+.nav-item.done .nav-dot { background: var(--crimson); border-color: var(--crimson); color: white; }
+.nav-item.active .nav-dot { border-color: var(--crimson-light); color: var(--crimson-light); }
+ 
+/* ── OVERLAY ─────────────────────────────────── */
+.overlay { position: fixed; inset: 0; z-index: 80; background: rgba(0,0,0,0.4); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+.overlay.show { opacity: 1; pointer-events: all; }
+ 
+/* ── HERO ────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  background: var(--navy);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 6rem 2rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%, rgba(192,48,63,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-eyebrow {
+  font-size: 0.7rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--crimson-light); margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.75rem;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ''; display: block; width: 30px; height: 1px; background: var(--crimson);
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(3rem, 8vw, 6rem);
+  color: var(--white);
+  line-height: 1.1;
+  text-align: center;
+  margin-bottom: 1rem;
+  position: relative;
+}
+.hero-title span { color: var(--crimson-light); }
+.hero-subtitle {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.25rem;
+  color: rgba(255,255,255,0.55);
+  text-align: center;
+  max-width: 520px;
+  line-height: 1.6;
+  margin-bottom: 3rem;
+}
+.hero-modules {
+  display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;
+  margin-bottom: 3rem;
+}
+.module-chip {
+  display: flex; align-items: center; gap: 0.5rem;
+  background: rgba(255,255,255,0.07);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 30px;
+  padding: 0.4rem 1rem;
+  font-size: 0.78rem; color: rgba(255,255,255,0.6);
+  cursor: pointer; transition: all 0.2s;
+}
+.module-chip:hover {
+  background: rgba(192,48,63,0.25);
+  border-color: var(--crimson-light);
+  color: var(--white);
+  transform: translateY(-2px);
+}
+.module-chip-num { color: var(--crimson-light); font-weight: 600; }
+.hero-cta {
+  background: var(--crimson);
+  color: white;
+  border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem; font-weight: 600;
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  box-shadow: 0 8px 32px rgba(192,48,63,0.4);
+}
+.hero-cta:hover { background: var(--crimson-light); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(192,48,63,0.5); }
+.hero-eyebrow,
+.hero-title,
+.hero-subtitle,
+.hero-modules,
+.hero-cta,
+.hero-scroll { position: relative; z-index: 1; }
+.hero-scroll::after { content: '↓'; font-size: 1.2rem; }
+@keyframes float { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(6px); } }
+ 
+/* ── CONTENT WRAPPER ─────────────────────────── */
+.content { padding-top: 60px; }
+ 
+/* ── SECTION HEADER ──────────────────────────── */
+.section-intro {
+  background: var(--cream-dark);
+  padding: 4rem 2rem;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+}
+.section-intro .module-tag {
+  font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--crimson); margin-bottom: 0.75rem; display: block;
+}
+.section-intro h2 {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--navy);
+  margin-bottom: 0.75rem;
+}
+.section-intro .meta {
+  display: flex; align-items: center; justify-content: center; gap: 2rem;
+  font-size: 0.78rem; color: var(--text-light); margin-top: 0.75rem;
+}
+.section-intro .meta span { display: flex; align-items: center; gap: 0.35rem; }
+ 
+/* ── MODULE CONTAINER ────────────────────────── */
+.module-section {
+  max-width: 820px; margin: 0 auto;
+  padding: 3rem 2rem 4rem;
+}
+ 
+/* ── THEORY CARD ─────────────────────────────── */
+.theory-intro {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.2rem;
+  color: var(--navy-mid);
+  line-height: 1.75;
+  border-left: 3px solid var(--crimson);
+  padding-left: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+ 
+.theory-grid { display: grid; gap: 1.25rem; margin-bottom: 2.5rem; }
+.theory-card {
+  background: var(--white);
+  border-radius: 16px;
+  padding: 1.5rem 1.75rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  display: flex; gap: 1.25rem; align-items: flex-start;
+}
+.theory-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  background: var(--rose);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0;
+}
+.theory-card h4 {
+  font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.1em;
+  color: var(--crimson); margin-bottom: 0.35rem; font-weight: 600;
+}
+.theory-card p { font-size: 0.92rem; color: var(--text); line-height: 1.6; }
+ 
+/* ── SECTION DIVIDER ─────────────────────────── */
+.section-divider {
+  display: flex; align-items: center; gap: 1rem;
+  margin: 2.5rem 0 1.75rem;
+}
+.section-divider::before, .section-divider::after {
+  content: ''; flex: 1; height: 1px; background: var(--border);
+}
+.section-divider span {
+  font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-light); white-space: nowrap;
+}
+ 
+/* ── INTERACTIVE LAB ─────────────────────────── */
+.lab-box {
+  background: var(--navy);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+.lab-box::before {
+  content: 'LAB EXERCISE';
+  position: absolute; top: 1.25rem; left: 1.75rem;
+  font-size: 0.6rem; letter-spacing: 0.2em; color: var(--crimson-light);
+  font-weight: 600;
+}
+.lab-box h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem; color: var(--white);
+  margin-top: 1.5rem; margin-bottom: 0.5rem;
+}
+.lab-box p { font-size: 0.88rem; color: rgba(255,255,255,0.55); line-height: 1.6; margin-bottom: 1.5rem; }
+ 
+/* ── BREATHING EXERCISE ──────────────────────── */
+.breathing-wrap { display: flex; flex-direction: column; align-items: center; padding: 1rem 0; }
+.breath-ring {
+  width: 160px; height: 160px; border-radius: 50%;
+  border: 3px solid rgba(192,48,63,0.3);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; margin-bottom: 1.5rem;
+  transition: all 0.8s cubic-bezier(0.4,0,0.2,1);
+}
+.breath-ring.inhale { transform: scale(1.35); border-color: rgba(192,48,63,0.8); box-shadow: 0 0 40px rgba(192,48,63,0.3); }
+.breath-ring.hold { transform: scale(1.35); border-color: rgba(201,151,58,0.8); box-shadow: 0 0 40px rgba(201,151,58,0.3); }
+.breath-ring.exhale { transform: scale(1); border-color: rgba(45,122,79,0.8); box-shadow: 0 0 40px rgba(45,122,79,0.2); }
+.breath-ring.hold2 { transform: scale(1); border-color: rgba(192,48,63,0.3); }
+.breath-inner {
+  width: 120px; height: 120px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(192,48,63,0.15), rgba(192,48,63,0.05));
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 0.25rem;
+}
+.breath-phase { font-size: 0.8rem; font-weight: 600; letter-spacing: 0.08em; color: var(--crimson-light); text-transform: uppercase; }
+.breath-count { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--white); }
+.breath-timer { font-size: 0.75rem; color: rgba(255,255,255,0.4); }
+.breath-controls { display: flex; gap: 1rem; }
+.btn-lab {
+  background: var(--crimson); color: white; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600;
+  padding: 0.65rem 1.5rem; border-radius: 30px; transition: all 0.2s;
+  letter-spacing: 0.05em; text-transform: uppercase;
+}
+.btn-lab:hover { background: var(--crimson-light); }
+.btn-lab.secondary {
+  background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+}
+.btn-lab.secondary:hover { background: rgba(255,255,255,0.15); }
+.breath-cycles { font-size: 0.78rem; color: rgba(255,255,255,0.4); margin-top: 0.75rem; }
+ 
+/* ── CHECKLIST ───────────────────────────────── */
+.lab-checklist { display: flex; flex-direction: column; gap: 0.75rem; }
+.check-item {
+  display: flex; align-items: center; gap: 0.85rem;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px; padding: 0.85rem 1rem;
+  cursor: pointer; transition: all 0.2s;
+  color: rgba(255,255,255,0.7); font-size: 0.88rem;
+}
+.check-item:hover { background: rgba(255,255,255,0.1); }
+.check-item.checked { background: rgba(192,48,63,0.15); border-color: rgba(192,48,63,0.4); color: white; }
+.check-box {
+  width: 22px; height: 22px; border-radius: 6px;
+  border: 2px solid rgba(255,255,255,0.25); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; transition: all 0.2s;
+}
+.check-item.checked .check-box { background: var(--crimson); border-color: var(--crimson); color: white; }
+ 
+/* ── TONGUE TWISTERS ─────────────────────────── */
+.twister-card {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 14px; padding: 1.25rem 1.5rem; margin-bottom: 0.75rem;
+  cursor: pointer; transition: all 0.2s; color: var(--white);
+}
+.twister-card:hover { background: rgba(255,255,255,0.1); }
+.twister-card.active { border-color: var(--crimson); background: rgba(192,48,63,0.12); }
+.twister-text { font-family: 'Crimson Pro', serif; font-size: 1.1rem; line-height: 1.5; }
+.twister-label { font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson-light); margin-bottom: 0.35rem; }
+.pace-timer-display {
+  text-align: center; padding: 1.5rem 0;
+  font-family: 'Playfair Display', serif; font-size: 3.5rem;
+  color: var(--white); line-height: 1;
+}
+.pace-phase-label { font-size: 0.8rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--crimson-light); margin-bottom: 0.5rem; }
+ 
+/* ── INDEX CARD ──────────────────────────────── */
+.index-card-builder { display: flex; flex-direction: column; gap: 1rem; }
+.ic-field label { display: block; font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--crimson-light); margin-bottom: 0.4rem; }
+.ic-field input {
+  width: 100%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 10px; padding: 0.75rem 1rem;
+  color: white; font-family: 'DM Sans', sans-serif; font-size: 0.9rem;
+  outline: none; transition: border-color 0.2s;
+}
+.ic-field input:focus { border-color: var(--crimson); }
+.ic-field input::placeholder { color: rgba(255,255,255,0.25); }
+.ic-preview {
+  background: var(--cream-dark); border-radius: 12px; padding: 1.25rem;
+  border: 2px dashed rgba(13,27,42,0.15); margin-top: 0.5rem;
+}
+.ic-preview-title { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-light); margin-bottom: 0.75rem; }
+.ic-preview-point { display: flex; gap: 0.75rem; padding: 0.5rem 0; font-size: 0.9rem; color: var(--navy); border-bottom: 1px dashed var(--border); }
+.ic-preview-point:last-child { border-bottom: none; }
+.ic-num { width: 22px; height: 22px; border-radius: 50%; background: var(--crimson); color: white; font-size: 0.7rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+ 
+/* ── QUIZ ────────────────────────────────────── */
+.quiz-wrap {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 2rem;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  margin-bottom: 2rem;
+}
+.quiz-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; }
+.quiz-tag { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--crimson); font-weight: 600; }
+.quiz-progress-dots { display: flex; gap: 0.35rem; }
+.q-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--border); transition: all 0.3s; }
+.q-dot.active { background: var(--crimson); transform: scale(1.2); }
+.q-dot.done { background: var(--green); }
+.quiz-q {
+  font-family: 'Crimson Pro', serif;
+  font-size: 1.25rem; color: var(--navy);
+  line-height: 1.5; margin-bottom: 1.25rem;
+}
+.quiz-options { display: flex; flex-direction: column; gap: 0.6rem; }
+.q-opt {
+  display: flex; align-items: center; gap: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 12px;
+  border: 1.5px solid var(--border);
+  cursor: pointer; transition: all 0.2s;
+  font-size: 0.9rem; color: var(--text);
+}
+.q-opt:hover { border-color: var(--crimson); background: var(--rose); }
+.q-opt.correct { background: #e8f7ef; border-color: var(--green); color: var(--green); }
+.q-opt.wrong { background: #fef2f3; border-color: var(--crimson); color: var(--crimson); }
+.q-opt.disabled { cursor: default; pointer-events: none; }
+.q-opt-letter {
+  width: 26px; height: 26px; border-radius: 50%;
+  background: var(--border); display: flex; align-items: center; justify-content: center;
+  font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+  transition: all 0.2s;
+}
+.q-opt.correct .q-opt-letter { background: var(--green); color: white; }
+.q-opt.wrong .q-opt-letter { background: var(--crimson); color: white; }
+.quiz-feedback {
+  margin-top: 1rem; padding: 0.9rem 1.1rem;
+  border-radius: 12px; font-size: 0.88rem; line-height: 1.5;
+  display: none;
+}
+.quiz-feedback.show { display: block; animation: fadeIn 0.3s ease; }
+.quiz-feedback.correct { background: #e8f7ef; color: var(--green); border-left: 3px solid var(--green); }
+.quiz-feedback.wrong { background: #fef2f3; color: #a02030; border-left: 3px solid var(--crimson); }
+.quiz-nav { display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem; }
+.btn-quiz-next {
+  background: var(--navy); color: white; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 0.82rem; font-weight: 600;
+  padding: 0.65rem 1.5rem; border-radius: 30px; transition: all 0.2s;
+  letter-spacing: 0.05em; opacity: 0; pointer-events: none;
+}
+.btn-quiz-next.show { opacity: 1; pointer-events: all; }
+.btn-quiz-next:hover { background: var(--crimson); }
+.quiz-score { font-size: 0.8rem; color: var(--text-light); }
+.quiz-result {
+  text-align: center; padding: 2rem 1rem;
+}
+.result-score {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 3.5rem; color: var(--navy);
+  line-height: 1; margin-bottom: 0.5rem;
+}
+.result-label { font-size: 0.85rem; color: var(--text-light); margin-bottom: 1.5rem; }
+.result-msg { font-family: 'Crimson Pro', serif; font-size: 1.1rem; color: var(--navy-mid); line-height: 1.5; }
+ 
+/* ── REFLECTION ──────────────────────────────── */
+.reflection-wrap {
+  background: var(--cream-dark);
+  border-radius: 20px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border: 1px solid var(--border);
+}
+.reflection-quote {
+  font-family: 'Playfair Display', serif;
+  font-style: italic;
+  font-size: 1.15rem; color: var(--navy);
+  line-height: 1.6; margin-bottom: 1.25rem;
+  border-left: 3px solid var(--crimson);
+  padding-left: 1rem;
+}
+.reflection-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text-light); margin-bottom: 0.5rem; display: block; }
+.reflection-wrap textarea {
+  width: 100%; min-height: 110px;
+  background: var(--white); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 1rem;
+  font-family: 'Crimson Pro', serif; font-size: 1rem;
+  color: var(--text); resize: vertical; outline: none;
+  transition: border-color 0.2s; line-height: 1.6;
+}
+.reflection-wrap textarea:focus { border-color: var(--crimson); }
+.reflection-wrap textarea::placeholder { color: #b0b8c4; }
+.reflection-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 0.75rem; }
+.char-count { font-size: 0.75rem; color: var(--text-light); }
+.btn-save-reflection {
+  background: var(--navy); color: white; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 0.78rem; font-weight: 600;
+  padding: 0.5rem 1.25rem; border-radius: 20px; transition: all 0.2s;
+}
+.btn-save-reflection:hover { background: var(--crimson); }
+.btn-save-reflection.saved { background: var(--green); }
+ 
+/* ── BADGE UNLOCK ────────────────────────────── */
+.badge-section {
+  text-align: center; padding: 2.5rem 1rem;
+  background: var(--white);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  border: 1px solid var(--border);
+  margin-bottom: 3rem;
+}
+.badge-icon {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: var(--rose);
+  border: 3px solid var(--rose-mid);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 2.5rem; margin: 0 auto 1rem;
+  transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+.badge-icon.earned {
+  background: linear-gradient(135deg, #f7c948, #e8973a);
+  border-color: #c9973a;
+  box-shadow: 0 0 40px rgba(201,151,58,0.5);
+  animation: badgePop 0.6s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes badgePop {
+  0% { transform: scale(0.5); opacity: 0; }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.badge-name { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.2rem; color: var(--navy); margin-bottom: 0.35rem; }
+.badge-desc { font-size: 0.82rem; color: var(--text-light); margin-bottom: 1.5rem; }
+.btn-earn-badge {
+  background: linear-gradient(135deg, var(--crimson), var(--crimson-light));
+  color: white; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 0.88rem; font-weight: 600;
+  padding: 0.85rem 2rem; border-radius: 30px;
+  transition: all 0.3s; box-shadow: 0 6px 24px rgba(192,48,63,0.35);
+  letter-spacing: 0.04em;
+}
+.btn-earn-badge:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(192,48,63,0.45); }
+.btn-earn-badge:disabled { background: #ccc; box-shadow: none; cursor: default; transform: none; }
+.badge-earned-msg { font-family: 'Crimson Pro', serif; font-size: 1rem; color: var(--green); font-style: italic; display: none; }
+.badge-earned-msg.show { display: block; animation: fadeIn 0.5s ease; }
+ 
+/* ── SECTION SEPARATOR ───────────────────────── */
+.module-separator {
+  height: 80px; background: var(--navy);
+  display: flex; align-items: center; justify-content: center;
+  position: relative;
+}
+.module-separator span {
+  font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+  color: rgba(255,255,255,0.2);
+}
+.module-separator::before, .module-separator::after {
+  content: ''; position: absolute; left: 0; right: 0;
+  height: 1px; background: rgba(255,255,255,0.06);
+}
+.module-separator::before { top: 0; }
+.module-separator::after { bottom: 0; }
+ 
+/* ── FINAL CERTIFICATE ───────────────────────── */
+.certificate-section {
+  background: var(--navy);
+  padding: 5rem 2rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.certificate-section::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(192,48,63,0.15) 0%, transparent 70%);
+}
+.oath-card {
+  max-width: 640px; margin: 0 auto 3rem;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 24px;
+  padding: 2.5rem;
+  position: relative;
+}
+.oath-tag { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--crimson-light); margin-bottom: 1.25rem; display: block; }
+.oath-text {
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 1.5rem;
+  color: var(--white); line-height: 1.5;
+}
+.badges-grid {
+  display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
+  max-width: 600px; margin: 0 auto 3rem;
+}
+.final-badge {
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  opacity: 0.3; transition: all 0.5s;
+}
+.final-badge.earned { opacity: 1; }
+.fb-icon {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: linear-gradient(135deg, #f7c948, #e8973a);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 20px rgba(201,151,58,0.4);
+}
+.fb-name { font-size: 0.68rem; color: rgba(255,255,255,0.5); text-align: center; max-width: 80px; }
+.final-badge.earned .fb-name { color: rgba(255,255,255,0.8); }
+.certificate-box {
+  max-width: 640px; margin: 0 auto;
+  background: linear-gradient(135deg, var(--cream) 0%, var(--cream-dark) 100%);
+  border-radius: 24px;
+  padding: 3rem;
+  position: relative;
+  display: none;
+}
+.certificate-box.show { display: block; animation: fadeIn 0.8s ease; }
+.cert-border {
+  position: absolute; inset: 12px;
+  border-radius: 16px;
+  border: 1.5px solid rgba(192,48,63,0.2);
+  pointer-events: none;
+}
+.cert-header { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--crimson); margin-bottom: 1rem; }
+.cert-main { font-family: 'Playfair Display', serif; font-style: italic; font-size: 2rem; color: var(--navy); margin-bottom: 0.5rem; }
+.cert-course { font-family: 'Crimson Pro', serif; font-size: 1rem; color: var(--text-light); margin-bottom: 1.5rem; }
+.cert-name-field {
+  display: inline-block;
+  font-family: 'Playfair Display', serif;
+  font-style: italic; font-size: 1.6rem; color: var(--crimson);
+  border-bottom: 2px solid var(--crimson);
+  padding-bottom: 0.25rem; min-width: 200px; margin-bottom: 1.5rem;
+}
+.cert-badges-row { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-bottom: 2rem; }
+.cert-badge-chip {
+  font-size: 0.72rem; padding: 0.3rem 0.85rem;
+  border-radius: 20px; background: var(--rose);
+  color: var(--crimson); border: 1px solid var(--rose-mid);
+}
+.cert-divider { height: 1px; background: var(--border); margin: 1.5rem 0; }
+.cert-footer { display: flex; justify-content: space-between; align-items: flex-end; }
+.cert-sig { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; color: var(--navy); }
+.cert-sig-label { font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-light); margin-top: 0.25rem; }
+.cert-date { font-size: 0.78rem; color: var(--text-light); text-align: right; }
+.checklist-final {
+  max-width: 640px; margin: 0 auto 3rem;
+}
+.checklist-final h3 { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.3rem; color: var(--white); margin-bottom: 1rem; }
+ 
+/* ── PROGRESS STRIP ──────────────────────────── */
+.progress-strip {
+  position: fixed; top: 60px; left: 0; right: 0; z-index: 99;
+  height: 3px; background: rgba(255,255,255,0.08);
+}
+.progress-fill {
+  height: 100%; background: linear-gradient(90deg, var(--crimson), var(--crimson-light));
+  transition: width 0.5s ease; width: 0%;
+}
+ 
+/* ── CONFETTI ────────────────────────────────── */
+.confetti-piece {
+  position: fixed; width: 8px; height: 8px; border-radius: 2px;
+  animation: confettiFall linear forwards;
+  pointer-events: none; z-index: 1000;
+}
+@keyframes confettiFall {
+  0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+ 
+/* ── UTILS ───────────────────────────────────── */
+@keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+.fade-in { animation: fadeIn 0.5s ease both; }
+ 
+/* ── RESPONSIVE ──────────────────────────────── */
+@media (max-width: 600px) {
+  .hero-title { font-size: 2.4rem; }
+  .module-section { padding: 2rem 1.25rem 3rem; }
+  .lab-box, .quiz-wrap, .reflection-wrap, .badge-section { padding: 1.5rem; }
+  .hero-modules { display: none; }
+}
+ 
+/* ── NAME INPUT MODAL ────────────────────────── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+  display: none;
+}
+.modal-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
+.modal-box {
+  background: var(--white);
+  border-radius: 20px;
+  padding: 2.5rem;
+  max-width: 420px; width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+}
+.modal-box h3 { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.5rem; color: var(--navy); margin-bottom: 0.5rem; }
+.modal-box p { font-size: 0.9rem; color: var(--text-light); margin-bottom: 1.5rem; }
+.modal-box input {
+  width: 100%; border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 0.85rem 1rem; font-family: 'DM Sans', sans-serif; font-size: 1rem;
+  color: var(--navy); outline: none; text-align: center; margin-bottom: 1.25rem;
+  transition: border-color 0.2s;
+}
+.modal-box input:focus { border-color: var(--crimson); }
+.btn-modal-start {
+  width: 100%; background: var(--crimson); color: white; border: none; cursor: pointer;
+  font-family: 'DM Sans', sans-serif; font-size: 0.9rem; font-weight: 600;
+  padding: 0.9rem; border-radius: 30px; transition: all 0.2s;
+}
+.btn-modal-start:hover { background: var(--crimson-light); }
+ 
+/* ── TIP HIGHLIGHT ───────────────────────────── */
+.tip-highlight {
+  background: linear-gradient(135deg, #fff8e8, #fef3f0);
+  border: 1px solid #f5d9b0;
+  border-radius: 14px;
+  padding: 1.25rem 1.5rem;
+  display: flex; gap: 1rem; align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+.tip-icon { font-size: 1.3rem; flex-shrink: 0; margin-top: 2px; }
+.tip-text { font-size: 0.9rem; color: #7a4520; line-height: 1.6; }
+.tip-text strong { font-weight: 700; }
+ 
+/* ── PACE DRILL ──────────────────────────────── */
+.pace-phases { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.pace-phase-btn {
+  flex: 1; padding: 0.5rem;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 8px; font-size: 0.75rem; color: rgba(255,255,255,0.5);
+  cursor: default; text-align: center; transition: all 0.3s;
+}
+.pace-phase-btn.active { background: rgba(192,48,63,0.2); border-color: var(--crimson-light); color: var(--crimson-light); font-weight: 600; }
+.pace-phase-btn.done { background: rgba(45,122,79,0.2); border-color: var(--green); color: #6ee9a0; }
+</style>
+</head>
+<body>
+ 
+<!-- ── HEADER ───────────────────────────────── -->
+<header class="header">
+  <div class="header-brand">
+    <span class="header-code">LSC 1503</span>
+    <div class="header-sep"></div>
+    <span class="header-title">The Confident Speaker</span>
+  </div>
+  <div class="header-right">
+    <div class="mastery-pill">
+      <span class="mastery-label">Mastery</span>
+      <span class="mastery-val" id="masteryVal">0%</span>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</header>
+ 
+<!-- Progress strip -->
+<div class="progress-strip"><div class="progress-fill" id="progressFill"></div></div>
+ 
+<!-- ── DRAWER NAV ────────────────────────────── -->
+<nav class="drawer" id="drawer">
+  <div class="drawer-title">Workshop Modules</div>
+  <a class="nav-item" id="nav-hero" onclick="scrollToSection('hero')">
+    <div class="nav-dot">★</div> Introduction
+  </a>
+  <a class="nav-item" id="nav-module1" data-nav="1" onclick="scrollToSection('module1')">
+    <div class="nav-dot" id="ndot1">1</div> The Science of Nerves
+  </a>
+  <a class="nav-item" id="nav-module2" data-nav="2" onclick="scrollToSection('module2')">
+    <div class="nav-dot" id="ndot2">2</div> Presence & Body Language
+  </a>
+  <a class="nav-item" id="nav-module3" data-nav="3" onclick="scrollToSection('module3')">
+    <div class="nav-dot" id="ndot3">3</div> Voice & Vocal Variety
+  </a>
+  <a class="nav-item" id="nav-module4" data-nav="4" onclick="scrollToSection('module4')">
+    <div class="nav-dot" id="ndot4">4</div> Bulletproof Preparation
+  </a>
+  <a class="nav-item" id="nav-final" onclick="scrollToSection('final')">
+    <div class="nav-dot">🏆</div> Certificate
+  </a>
+</nav>
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+ 
+<!-- ── NAME MODAL ───────────────────────────── -->
+<div class="modal-overlay show" id="nameModal">
+  <div class="modal-box">
+    <h3>Welcome, Speaker</h3>
+    <p>Enter your name to begin the workshop and receive your certificate.</p>
+    <input type="text" id="studentName" placeholder="Your full name" maxlength="50">
+    <button class="btn-modal-start" onclick="startWorkshop()">Begin Workshop →</button>
+  </div>
+</div>
+ 
+<!-- ── CONTENT ───────────────────────────────── -->
+<div class="content">
+ 
+<!-- HERO -->
+<section id="hero" class="hero">
+  <div class="hero-eyebrow">Professional Spoken Communication</div>
+  <h1 class="hero-title">The <span>Confident</span><br>Speaker</h1>
+  <p class="hero-subtitle">A high-performance workshop to synchronize your voice, body, and mindset for the stage.</p>
+  <div class="hero-modules">
+    <div class="module-chip" onclick="scrollToSection('module1')" role="button" tabindex="0"><span class="module-chip-num">01</span> The Science of Nerves</div>
+    <div class="module-chip" onclick="scrollToSection('module2')" role="button" tabindex="0"><span class="module-chip-num">02</span> Presence & Body Language</div>
+    <div class="module-chip" onclick="scrollToSection('module3')" role="button" tabindex="0"><span class="module-chip-num">03</span> Voice & Vocal Variety</div>
+    <div class="module-chip" onclick="scrollToSection('module4')" role="button" tabindex="0"><span class="module-chip-num">04</span> Bulletproof Preparation</div>
+  </div>
+  <button class="hero-cta" onclick="scrollToSection('module1')">Start Workshop ↓</button>
+  <div class="hero-scroll">Scroll</div>
+</section>
+ 
+<!-- ══════════════════════════════════════════════ -->
+<!-- MODULE 1: SCIENCE OF NERVES -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="module1">
+  <div class="section-intro">
+    <span class="module-tag">Module 01 · 15 mins · Badge: The Fearless Mind</span>
+    <h2>The Science of Nerves</h2>
+    <div class="meta">
+      <span>🧠 Psychology</span>
+      <span>💡 Reframe Technique</span>
+      <span>🫁 Breathing Lab</span>
+    </div>
+  </div>
+ 
+  <div class="module-section">
+    <p class="theory-intro">Stage fright is not a weakness — it is your body's ancient survival system. Understanding <em>why</em> it happens gives you the power to control it.</p>
+ 
+    <div class="theory-grid">
+      <div class="theory-card">
+        <div class="theory-icon">🧠</div>
+        <div>
+          <h4>The Amygdala Response</h4>
+          <p>When you step in front of an audience, your brain's amygdala signals a "fight or flight" response — the same system that helped our ancestors survive danger. Your body does not know the difference between a lion and a live audience.</p>
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">⚡</div>
+        <div>
+          <h4>Adrenaline Rush</h4>
+          <p>Your body releases adrenaline, which increases your heart rate and makes you feel "wired." This is actually energy — the trick is directing it, not fighting it.</p>
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">🌫️</div>
+        <div>
+          <h4>Cortisol & "Brain Fog"</h4>
+          <p>The stress hormone cortisol can cloud your thinking and make you forget your words. Controlled breathing before you speak directly reduces cortisol levels.</p>
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">🫁</div>
+        <div>
+          <h4>Shallow Breathing</h4>
+          <p>Anxiety causes you to breathe from your chest, not your diaphragm. This limits oxygen to the brain, making the fog worse. Deep breathing breaks this cycle.</p>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="tip-highlight">
+      <div class="tip-icon">✨</div>
+      <div class="tip-text"><strong>The Reframe Technique:</strong> Instead of saying "I am nervous," say "I am excited." Physiologically, anxiety and excitement are nearly identical — the only difference is the mental label you give it. This simple switch has been proven to improve performance.</div>
+    </div>
+ 
+    <!-- LAB: BOX BREATHING -->
+    <div class="section-divider"><span>Lab Exercise</span></div>
+    <div class="lab-box">
+      <h3>Box Breathing</h3>
+      <p>Use this technique before any presentation or practice session. Breathe in a square: 4 seconds each phase. Complete 3 full rounds.</p>
+      <div class="breathing-wrap">
+        <div class="breath-ring" id="breathRing1">
+          <div class="breath-inner">
+            <div class="breath-phase" id="bPhase1">Ready</div>
+            <div class="breath-count" id="bCount1">—</div>
+            <div class="breath-timer" id="bTimer1">Press Start</div>
+          </div>
+        </div>
+        <div class="breath-controls">
+          <button class="btn-lab" id="breathBtn1" onclick="toggleBreathing1()">▶ Start</button>
+          <button class="btn-lab secondary" onclick="resetBreathing1()">↺ Reset</button>
+        </div>
+        <div class="breath-cycles" id="breathCycles1">Cycles: 0 / 3</div>
+      </div>
+    </div>
+ 
+    <!-- LAB: PHYSIOLOGICAL SIGH -->
+    <div class="lab-box">
+      <h3>The Physiological Sigh</h3>
+      <p>This technique, used by neuroscientists, calms your nervous system in seconds. Follow the steps below:</p>
+      <div class="lab-checklist" id="sighChecklist">
+        <div class="check-item" onclick="toggleCheck(this, 'sigh')">
+          <div class="check-box">✓</div>
+          <span>Take a long, deep inhale through your nose (fill your lungs fully)</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this, 'sigh')">
+          <div class="check-box">✓</div>
+          <span>At the top, take a quick second "sip" of air to fully expand the lungs</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this, 'sigh')">
+          <div class="check-box">✓</div>
+          <span>Release with a long, slow exhale through your mouth (double the inhale length)</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this, 'sigh')">
+          <div class="check-box">✓</div>
+          <span>Repeat 2–3 times. Notice the immediate sense of calm.</span>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- QUIZ 1 -->
+    <div class="section-divider"><span>Knowledge Check</span></div>
+    <div id="quiz1" class="quiz-wrap"></div>
+ 
+    <!-- REFLECTION 1 -->
+    <div class="section-divider"><span>Insight Lab</span></div>
+    <div class="reflection-wrap">
+      <div class="reflection-quote">"How did your body physically respond to the box breathing exercise? Note any shifts in your heart rate or muscle tension."</div>
+      <span class="reflection-label">Your reflection</span>
+      <textarea id="ref1" placeholder="Pour your thoughts here..." oninput="updateCharCount('ref1','cc1')"></textarea>
+      <div class="reflection-footer">
+        <span class="char-count" id="cc1">0 characters</span>
+        <button class="btn-save-reflection" onclick="saveReflection('ref1','rb1')">Save →</button>
+      </div>
+    </div>
+ 
+    <!-- BADGE 1 -->
+    <div class="badge-section" id="badge1">
+      <div class="badge-icon" id="badgeIcon1">🏅</div>
+      <div class="badge-name">The Fearless Mind</div>
+      <div class="badge-desc">Awarded for understanding the science of stage fright and completing the breathing lab.</div>
+      <button class="btn-earn-badge" id="badgeBtn1" onclick="earnBadge(1)">Earn This Badge ✦</button>
+      <div class="badge-earned-msg" id="badgeMsg1">🎉 Badge earned! You have a fearless mind.</div>
+    </div>
+    <div style="text-align:center;margin-top:2rem;">
+      <button class="hero-cta" style="font-size:0.82rem;padding:0.8rem 2rem;" onclick="scrollToSection('module2')">Next Module: Presence & Body Language →</button>
+    </div>
+  </div>
+</section>
+ 
+<div class="module-separator"><span>Module 02</span></div>
+ 
+<!-- ══════════════════════════════════════════════ -->
+<!-- MODULE 2: PRESENCE & BODY LANGUAGE -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="module2">
+  <div class="section-intro">
+    <span class="module-tag">Module 02 · 20 mins · Badge: The Magnetic Presence</span>
+    <h2>Presence & Body Language</h2>
+    <div class="meta">
+      <span>💪 Power Pose</span>
+      <span>👁 Eye Contact</span>
+      <span>🤲 Open Gestures</span>
+    </div>
+  </div>
+ 
+  <div class="module-section">
+    <p class="theory-intro">On a TED stage, your body speaks before you open your mouth. Presence is not about looking confident — it is about <em>becoming</em> confident through deliberate physical choices.</p>
+ 
+    <div class="theory-grid">
+      <div class="theory-card">
+        <div class="theory-icon">💪</div>
+        <div>
+          <h4>1. The Power Pose</h4>
+          <p>Stand tall, chest open, hands on hips — for 2 minutes, privately before your talk. Research shows this lowers cortisol and increases confidence-related hormones, so you walk on stage already feeling powerful.</p>
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">👁</div>
+        <div>
+          <h4>2. The Triangle of Trust</h4>
+          <p>When speaking, move your eyes slowly in a triangle across the room: Left → Right → Center. This makes everyone feel included without the mechanical back-and-forth that looks like a "lighthouse."</p>
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">🤲</div>
+        <div>
+          <h4>3. Open Gestures</h4>
+          <p>Keep your palms visible when you gesture. Research in nonverbal communication shows that hidden hands — behind your back or in your pockets — trigger a subtle distrust response in the human brain.</p>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="tip-highlight">
+      <div class="tip-icon">🔑</div>
+      <div class="tip-text"><strong>Key Insight:</strong> Your posture sends signals not only to your audience, but to your own brain. Standing in an open, expansive posture for two minutes before speaking literally changes your neurochemistry. Use the time before you walk on stage wisely.</div>
+    </div>
+ 
+    <!-- LAB: MIRROR AUDIT -->
+    <div class="section-divider"><span>Lab Exercise</span></div>
+    <div class="lab-box">
+      <h3>The Mirror Audit</h3>
+      <p>Deliver the first 30 seconds of your talk in front of a mirror or phone camera. Use the checklist below to audit your body language in real time.</p>
+      <div class="lab-checklist" id="mirrorChecklist">
+        <div class="check-item" onclick="toggleCheck(this,'mirror')">
+          <div class="check-box">✓</div>
+          <span>Shoulders are back — not hunched or tense</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this,'mirror')">
+          <div class="check-box">✓</div>
+          <span>Feet shoulder-width apart — grounded, not swaying</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this,'mirror')">
+          <div class="check-box">✓</div>
+          <span>Hands are visible — not in pockets or behind back</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this,'mirror')">
+          <div class="check-box">✓</div>
+          <span>Eye contact is steady — not staring at notes or the floor</span>
+        </div>
+        <div class="check-item" onclick="toggleCheck(this,'mirror')">
+          <div class="check-box">✓</div>
+          <span>Face is relaxed — jaw unclenched, natural expression</span>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- QUIZ 2 -->
+    <div class="section-divider"><span>Knowledge Check</span></div>
+    <div id="quiz2" class="quiz-wrap"></div>
+ 
+    <!-- REFLECTION 2 -->
+    <div class="section-divider"><span>Insight Lab</span></div>
+    <div class="reflection-wrap">
+      <div class="reflection-quote">"Which of the three techniques (Power Pose, Triangle of Trust, Open Gestures) felt most unnatural to you? Why do you think your body resists that posture?"</div>
+      <span class="reflection-label">Your reflection</span>
+      <textarea id="ref2" placeholder="Explore your honest response..." oninput="updateCharCount('ref2','cc2')"></textarea>
+      <div class="reflection-footer">
+        <span class="char-count" id="cc2">0 characters</span>
+        <button class="btn-save-reflection" id="rb2" onclick="saveReflection('ref2','rb2')">Save →</button>
+      </div>
+    </div>
+ 
+    <!-- BADGE 2 -->
+    <div class="badge-section" id="badge2">
+      <div class="badge-icon" id="badgeIcon2">🏅</div>
+      <div class="badge-name">The Magnetic Presence</div>
+      <div class="badge-desc">Awarded for mastering the body language of confident, trustworthy speakers.</div>
+      <button class="btn-earn-badge" id="badgeBtn2" onclick="earnBadge(2)">Earn This Badge ✦</button>
+      <div class="badge-earned-msg" id="badgeMsg2">🎉 Badge earned! Your presence commands the room.</div>
+    </div>
+    <div style="text-align:center;margin-top:2rem;">
+      <button class="hero-cta" style="font-size:0.82rem;padding:0.8rem 2rem;" onclick="scrollToSection('module3')">Next Module: Voice & Vocal Variety →</button>
+    </div>
+  </div>
+</section>
+ 
+<div class="module-separator"><span>Module 03</span></div>
+ 
+<!-- ══════════════════════════════════════════════ -->
+<!-- MODULE 3: VOICE & VOCAL VARIETY -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="module3">
+  <div class="section-intro">
+    <span class="module-tag">Module 03 · 25 mins · Badge: The Master Orator</span>
+    <h2>Voice & Vocal Variety</h2>
+    <div class="meta">
+      <span>⏸ The Power of Pause</span>
+      <span>🎚 Pitch & Pace</span>
+      <span>🗣 Enunciation</span>
+    </div>
+  </div>
+ 
+  <div class="module-section">
+    <p class="theory-intro">TED speakers use their voice like a musical instrument. It is not just <em>what</em> you say — it is the rhythm, pitch, and silence of your delivery that moves an audience.</p>
+ 
+    <div class="theory-grid">
+      <div class="theory-card">
+        <div class="theory-icon">⏸</div>
+        <div>
+          <h4>1. The Power of the Pause</h4>
+          <p>The most impactful moments in any great talk often happen in silence. After making a key point, pause for 3 full seconds. Let the idea land. Let your audience breathe. Silence signals confidence, not weakness.</p>
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">🎚</div>
+        <div>
+          <h4>2. Pitch & Pace</h4>
+          <p>High pitch signals excitement or questioning. Low pitch signals authority and seriousness. A slower pace says "this matters — listen carefully." Vary all three deliberately rather than speaking in a monotone.</p>
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">🗣</div>
+        <div>
+          <h4>3. Enunciation</h4>
+          <p>Clear speech builds credibility. If your audience has to work hard to understand you, they stop trusting your message. Warm up your articulators before speaking — tongue twisters are the athlete's stretch for speakers.</p>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="tip-highlight">
+      <div class="tip-icon">🎯</div>
+      <div class="tip-text"><strong>Common Mistake:</strong> Most nervous speakers rush. They fill silence with filler words like "um," "so," "like," or "you know." Replace every filler word with a deliberate, confident pause. Your audience will not notice the gap — they will notice how composed you seem.</div>
+    </div>
+ 
+    <!-- LAB: 3-PACE DRILL -->
+    <div class="section-divider"><span>Lab Exercise</span></div>
+    <div class="lab-box">
+      <h3>The 3-Pace Drill</h3>
+      <p>Read the passage below at 3 different speeds. Each phase has a timer. This trains your vocal range and helps you discover your natural "emphasis pace."</p>
+ 
+      <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:12px;padding:1.25rem;margin-bottom:1rem;">
+        <p style="font-family:'Crimson Pro',serif;font-size:1.05rem;color:rgba(255,255,255,0.85);line-height:1.7;font-style:italic;">"The most powerful moment in any presentation is not the beginning, and it is not the end. It is the pause — the single breath you take after saying something that matters, before you say the next word. That pause is where your audience thinks. That pause is where your idea becomes theirs."</p>
+      </div>
+ 
+      <div class="pace-phases">
+        <div class="pace-phase-btn" id="pp1">① As Fast As You Can</div>
+        <div class="pace-phase-btn" id="pp2">② Painfully Slow</div>
+        <div class="pace-phase-btn" id="pp3">③ With Emphasis</div>
+      </div>
+      <div class="pace-timer-display" id="paceDisplay">00:30</div>
+      <div class="pace-phase-label" id="pacePhaseLabel">Select a phase to begin</div>
+      <div class="breath-controls">
+        <button class="btn-lab" onclick="startPace(1)">① Fast</button>
+        <button class="btn-lab" onclick="startPace(2)">② Slow</button>
+        <button class="btn-lab" onclick="startPace(3)">③ Emphasis</button>
+        <button class="btn-lab secondary" onclick="resetPace()">↺</button>
+      </div>
+    </div>
+ 
+    <!-- LAB: TONGUE TWISTERS -->
+    <div class="lab-box">
+      <h3>Tongue Twister Warm-Up</h3>
+      <p>Choose a tongue twister. Say it 3 times: first slowly (for accuracy), then faster (for fluency), then at full speed. Click to select your challenge.</p>
+      <div id="twisters">
+        <div class="twister-card" onclick="selectTwister(this)">
+          <div class="twister-label">Level 1 · Beginner</div>
+          <div class="twister-text">She sells seashells by the seashore. The shells she sells are surely seashells.</div>
+        </div>
+        <div class="twister-card" onclick="selectTwister(this)">
+          <div class="twister-label">Level 2 · Intermediate</div>
+          <div class="twister-text">Peter Piper picked a peck of pickled peppers. A peck of pickled peppers Peter Piper picked.</div>
+        </div>
+        <div class="twister-card" onclick="selectTwister(this)">
+          <div class="twister-label">Level 3 · Advanced</div>
+          <div class="twister-text">How much wood would a woodchuck chuck, if a woodchuck could chuck wood? He would chuck, he would, as much as he could, if a woodchuck could chuck wood.</div>
+        </div>
+      </div>
+    </div>
+ 
+    <!-- QUIZ 3 -->
+    <div class="section-divider"><span>Knowledge Check</span></div>
+    <div id="quiz3" class="quiz-wrap"></div>
+ 
+    <!-- REFLECTION 3 -->
+    <div class="section-divider"><span>Insight Lab</span></div>
+    <div class="reflection-wrap">
+      <div class="reflection-quote">"Record yourself using the Intentional Pause after your key points. How much longer did the silence feel to you compared to how it actually sounded in the recording?"</div>
+      <span class="reflection-label">Your reflection</span>
+      <textarea id="ref3" placeholder="Describe the experience..." oninput="updateCharCount('ref3','cc3')"></textarea>
+      <div class="reflection-footer">
+        <span class="char-count" id="cc3">0 characters</span>
+        <button class="btn-save-reflection" id="rb3" onclick="saveReflection('ref3','rb3')">Save →</button>
+      </div>
+    </div>
+ 
+    <!-- BADGE 3 -->
+    <div class="badge-section" id="badge3">
+      <div class="badge-icon" id="badgeIcon3">🏅</div>
+      <div class="badge-name">The Master Orator</div>
+      <div class="badge-desc">Awarded for mastering vocal variety, the power of the pause, and enunciation drills.</div>
+      <button class="btn-earn-badge" id="badgeBtn3" onclick="earnBadge(3)">Earn This Badge ✦</button>
+      <div class="badge-earned-msg" id="badgeMsg3">🎉 Badge earned! Your voice is your instrument.</div>
+    </div>
+    <div style="text-align:center;margin-top:2rem;">
+      <button class="hero-cta" style="font-size:0.82rem;padding:0.8rem 2rem;" onclick="scrollToSection('module4')">Next Module: Bulletproof Preparation →</button>
+    </div>
+  </div>
+</section>
+ 
+<div class="module-separator"><span>Module 04</span></div>
+ 
+<!-- ══════════════════════════════════════════════ -->
+<!-- MODULE 4: BULLETPROOF PREPARATION -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="module4">
+  <div class="section-intro">
+    <span class="module-tag">Module 04 · 30 mins · Badge: The Bulletproof Speaker</span>
+    <h2>Bulletproof Preparation</h2>
+    <div class="meta">
+      <span>📋 Rule of 3s</span>
+      <span>💥 The Ugly Run-Through</span>
+      <span>🛡 Tech Contingency</span>
+    </div>
+  </div>
+ 
+  <div class="module-section">
+    <p class="theory-intro">Never memorize a script word-for-word. If you lose one word, you lose the whole chain. True preparation means knowing your <em>ideas</em> so deeply that the words take care of themselves.</p>
+ 
+    <div class="theory-grid">
+      <div class="theory-card">
+        <div class="theory-icon">📋</div>
+        <div>
+          <h4>1. Rule of 3s</h4>
+          <p>Break your talk into exactly 3 main pillars. Audiences remember things in threes (beginning, middle, end; problem, solution, action). Memorize the <em>transitions between</em> your points — not the content within them.</p>
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">💥</div>
+        <div>
+          <h4>2. The "Ugly" Run-Through</h4>
+          <p>Do one full rehearsal where you intentionally make mistakes — forget a word, stumble over a phrase — and keep going without stopping. This trains your brain to recover gracefully on stage instead of freezing.</p>
+        </div>
+      </div>
+      <div class="theory-card">
+        <div class="theory-icon">🛡</div>
+        <div>
+          <h4>3. Tech Contingency</h4>
+          <p>Assume the projector will fail, the clicker will break, and the slides will not appear. Know your talk so deeply that you could give the entire presentation in the dark, with nothing but your voice.</p>
+        </div>
+      </div>
+    </div>
+ 
+    <div class="tip-highlight">
+      <div class="tip-icon">⚓</div>
+      <div class="tip-text"><strong>Your "Fearless Anchor":</strong> Identify the single most important idea in your entire talk — the one sentence that captures everything you want your audience to remember. If you lose your place, return to this anchor and rebuild from there. It is your home base.</div>
+    </div>
+ 
+    <!-- LAB: INDEX CARD BUILDER -->
+    <div class="section-divider"><span>Lab Exercise</span></div>
+    <div class="lab-box">
+      <h3>The Index Card Method</h3>
+      <p>Write your 3 main points in one sentence each. Practice using ONLY this card as your guide — not a script, not slides. Your ideas should live in your mind, not on paper.</p>
+      <div class="index-card-builder">
+        <div class="ic-field">
+          <label>Main Point 1 — Your Opening Pillar</label>
+          <input type="text" id="ic1" placeholder="e.g., The problem we face today is..." oninput="updateCardPreview()">
+        </div>
+        <div class="ic-field">
+          <label>Main Point 2 — Your Core Argument</label>
+          <input type="text" id="ic2" placeholder="e.g., The solution I propose is..." oninput="updateCardPreview()">
+        </div>
+        <div class="ic-field">
+          <label>Main Point 3 — Your Call to Action</label>
+          <input type="text" id="ic3" placeholder="e.g., The one action you can take today is..." oninput="updateCardPreview()">
+        </div>
+        <div class="ic-preview" id="icPreview">
+          <div class="ic-preview-title">📇 Your Index Card Preview</div>
+          <div class="ic-preview-point"><span class="ic-num">1</span><span id="icPrev1" style="color:#9aabb8;font-style:italic;">Your first point will appear here...</span></div>
+          <div class="ic-preview-point"><span class="ic-num">2</span><span id="icPrev2" style="color:#9aabb8;font-style:italic;">Your second point will appear here...</span></div>
+          <div class="ic-preview-point"><span class="ic-num">3</span><span id="icPrev3" style="color:#9aabb8;font-style:italic;">Your third point will appear here...</span></div>
+        </div>
+        <div class="ic-field">
+          <label>Your Fearless Anchor — One Core Sentence</label>
+          <input type="text" id="ic4" placeholder="The one idea my audience must leave with is..." oninput="updateCardPreview()">
+        </div>
+      </div>
+    </div>
+ 
+    <!-- QUIZ 4 -->
+    <div class="section-divider"><span>Knowledge Check</span></div>
+    <div id="quiz4" class="quiz-wrap"></div>
+ 
+    <!-- REFLECTION 4 -->
+    <div class="section-divider"><span>Insight Lab</span></div>
+    <div class="reflection-wrap">
+      <div class="reflection-quote">"What is your 'Fearless Anchor'? If you completely lose your place during your TED Talk, what is the one core idea you will return to — and why does it matter?"</div>
+      <span class="reflection-label">Your reflection</span>
+      <textarea id="ref4" placeholder="Define your anchor..." oninput="updateCharCount('ref4','cc4')"></textarea>
+      <div class="reflection-footer">
+        <span class="char-count" id="cc4">0 characters</span>
+        <button class="btn-save-reflection" id="rb4" onclick="saveReflection('ref4','rb4')">Save →</button>
+      </div>
+    </div>
+ 
+    <!-- BADGE 4 -->
+    <div class="badge-section" id="badge4">
+      <div class="badge-icon" id="badgeIcon4">🏅</div>
+      <div class="badge-name">The Bulletproof Speaker</div>
+      <div class="badge-desc">Awarded for mastering the preparation strategies that make great speakers unshakeable.</div>
+      <button class="btn-earn-badge" id="badgeBtn4" onclick="earnBadge(4)">Earn This Badge ✦</button>
+      <div class="badge-earned-msg" id="badgeMsg4">🎉 Badge earned! Nothing can stop you now.</div>
+    </div>
+    <div style="text-align:center;margin-top:2rem;">
+      <button class="hero-cta" style="font-size:0.82rem;padding:0.8rem 2rem;" onclick="scrollToSection('final')">Go to My Certificate 🏆</button>
+    </div>
+  </div>
+</section>
+ 
+<!-- ══════════════════════════════════════════════ -->
+<!-- FINAL: CERTIFICATE -->
+<!-- ══════════════════════════════════════════════ -->
+<section id="final" class="certificate-section">
+  <!-- Speaker's Oath -->
+  <div class="oath-card">
+    <span class="oath-tag">The Speaker's Oath · LSC 1503</span>
+    <div class="oath-text">"Presenting is not about being perfect.<br>It is about being powerful."</div>
+  </div>
+ 
+  <!-- Pre-talk Checklist -->
+  <div class="checklist-final">
+    <h3>Pre-Presentation Checklist</h3>
+    <div style="display:flex;flex-direction:column;gap:0.6rem;">
+      <div class="check-item" onclick="toggleCheck(this,'final')">
+        <div class="check-box">✓</div><span>I have done my 3 rounds of box breathing</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'final')">
+        <div class="check-box">✓</div><span>I have practised my Power Pose for 2 minutes</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'final')">
+        <div class="check-box">✓</div><span>I know my 3 main pillars — not word for word, but idea for idea</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'final')">
+        <div class="check-box">✓</div><span>I have done my physiological sigh to calm my nervous system</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'final')">
+        <div class="check-box">✓</div><span>I have warmed up my voice and articulators</span>
+      </div>
+      <div class="check-item" onclick="toggleCheck(this,'final')">
+        <div class="check-box">✓</div><span>I know my Fearless Anchor — I can return to it at any moment</span>
+      </div>
+    </div>
+  </div>
+ 
+  <!-- Badges earned -->
+  <div class="badges-grid">
+    <div class="final-badge" id="fb1"><div class="fb-icon">🧠</div><div class="fb-name">The Fearless Mind</div></div>
+    <div class="final-badge" id="fb2"><div class="fb-icon">⚡</div><div class="fb-name">The Magnetic Presence</div></div>
+    <div class="final-badge" id="fb3"><div class="fb-icon">🎙</div><div class="fb-name">The Master Orator</div></div>
+    <div class="final-badge" id="fb4"><div class="fb-icon">🛡</div><div class="fb-name">The Bulletproof Speaker</div></div>
+  </div>
+ 
+  <!-- Generate Certificate -->
+  <button class="hero-cta" id="generateCertBtn" onclick="generateCertificate()" style="margin-bottom:2rem;">
+    Generate My Certificate ✦
+  </button>
+ 
+  <!-- Certificate -->
+  <div class="certificate-box" id="certBox">
+    <div class="cert-border"></div>
+    <div class="cert-header">LSC 1503 · Professional Spoken Communication · Higher Colleges of Technology</div>
+    <div class="cert-main">Certificate of Completion</div>
+    <div class="cert-course">The Confident Speaker Workshop · 2026</div>
+    <div style="font-family:'Crimson Pro',serif;font-size:1rem;color:#5a6a7a;margin-bottom:0.5rem;">This certifies that</div>
+    <div class="cert-name-field" id="certNameDisplay"></div>
+    <div style="font-family:'Crimson Pro',serif;font-size:0.95rem;color:#5a6a7a;max-width:420px;margin:0 auto 1.5rem;line-height:1.6;">has successfully completed all four modules and earned the following badges:</div>
+    <div class="cert-badges-row" id="certBadgesRow"></div>
+    <div class="cert-divider"></div>
+    <div class="cert-footer">
+      <div>
+        <div class="cert-sig">Nazila Motahari</div>
+        <div class="cert-sig-label">Course Instructor · LSC 1503</div>
+      </div>
+      <div class="cert-date" id="certDate"></div>
+    </div>
+  </div>
+ 
+  <div style="margin-top:3rem;font-size:0.7rem;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.2);">
+    Educational Resource · Strictly for Academic Use<br>
+    <span style="color:rgba(255,255,255,0.3);margin-top:0.35rem;display:block;">Designed by Nazila Motahari · © 2026</span>
+  </div>
+</section>
+ 
+</div><!-- end .content -->
+ 
+<script>
+/* ══════════════════════════════════════════════════════════
+   DATA
+══════════════════════════════════════════════════════════ */
+const quizData = {
+  1: [
+    {
+      q: "When you step in front of an audience, which part of the brain triggers the 'fight or flight' response?",
+      opts: ["The prefrontal cortex", "The amygdala", "The hippocampus", "The cerebellum"],
+      ans: 1,
+      exp: "Correct! The amygdala acts as your brain's alarm system. It triggers the fight-or-flight response when it perceives a threat — including an audience."
+    },
+    {
+      q: "According to the Reframe Technique, what should you say to yourself instead of 'I am nervous'?",
+      opts: ["I am calm", "I am ready", "I am excited", "I am focused"],
+      ans: 2,
+      exp: "Exactly right! 'I am excited' works because physiologically, anxiety and excitement are almost identical. The only difference is your mental label."
+    },
+    {
+      q: "What is one effect of cortisol release during stage fright?",
+      opts: ["Faster memory recall", "'Brain fog' and unclear thinking", "Increased confidence", "Slower heart rate"],
+      ans: 1,
+      exp: "Correct! Cortisol, the stress hormone, can cloud your thinking — this is why controlled breathing before speaking is so important."
+    }
+  ],
+  2: [
+    {
+      q: "When should you use the Power Pose technique?",
+      opts: ["On stage, in front of the audience", "Privately, before you walk on stage", "After your talk is finished", "During the Q&A session"],
+      ans: 1,
+      exp: "Correct! The Power Pose should be done privately before your talk. It shifts your neurochemistry so you walk on stage already feeling confident."
+    },
+    {
+      q: "What is the purpose of the 'Triangle of Trust' eye contact technique?",
+      opts: ["To make the audience laugh", "To ensure everyone feels included without mechanical scanning", "To show you have memorized your talk", "To avoid looking at nervous audience members"],
+      ans: 1,
+      exp: "Exactly! Moving your eyes Left → Right → Center in a slow triangle makes the whole room feel seen, without the robotic 'lighthouse' effect."
+    },
+    {
+      q: "Why should you keep your palms visible when gesturing?",
+      opts: ["It looks more professional", "It helps you remember your lines", "Hidden hands trigger a subconscious distrust response in the brain", "It makes your gestures larger"],
+      ans: 2,
+      exp: "Correct! Research in nonverbal communication shows that visible palms signal openness and honesty. Hidden hands create a subtle sense of distrust."
+    }
+  ],
+  3: [
+    {
+      q: "What does a low vocal pitch signal to your audience?",
+      opts: ["Excitement and enthusiasm", "Questioning and uncertainty", "Authority and seriousness", "Nervousness and worry"],
+      ans: 2,
+      exp: "Right! A lower pitch signals authority and seriousness. This is why confident speakers deliberately lower their voice when making key points."
+    },
+    {
+      q: "After making a big point in your talk, what should you do?",
+      opts: ["Immediately move to the next slide", "Speak faster to keep momentum", "Pause for 3 seconds and let the audience absorb the idea", "Repeat the point louder"],
+      ans: 2,
+      exp: "Exactly! A 3-second pause after a key point is a powerful tool. It signals confidence and gives your audience time to think — which is where the real impact happens."
+    },
+    {
+      q: "What is the main purpose of doing tongue twister warm-ups before presenting?",
+      opts: ["To memorize your script faster", "To warm up your articulators for clearer, more credible speech", "To reduce adrenaline", "To practise eye contact"],
+      ans: 1,
+      exp: "Correct! Tongue twisters warm up the muscles of your mouth, tongue, and jaw — just like a runner stretches before a race. Clear speech builds credibility."
+    }
+  ],
+  4: [
+    {
+      q: "According to the Rule of 3s, what should you memorize about your talk structure?",
+      opts: ["Every word of the script", "The transitions between your 3 main pillars", "Your opening joke", "The exact statistics and data"],
+      ans: 1,
+      exp: "Exactly right! Memorize the *transitions* between your 3 main points, not the content within each one. This gives you a structure to return to if you lose your place."
+    },
+    {
+      q: "What is the purpose of the 'Ugly' Run-Through rehearsal?",
+      opts: ["To record yourself for feedback", "To practice in front of a live audience", "To train your brain to recover from mistakes without stopping", "To test your technology and slides"],
+      ans: 2,
+      exp: "Correct! By deliberately making mistakes during rehearsal and continuing anyway, you train your brain not to panic when something goes wrong on stage."
+    },
+    {
+      q: "What does 'Tech Contingency' mean for a speaker?",
+      opts: ["Having a backup laptop", "Knowing your talk so deeply you could deliver it with no technology at all", "Bringing extra HDMI cables", "Practising with the remote clicker"],
+      ans: 1,
+      exp: "Right! True preparation means your talk lives in your mind and voice — not in your slides. If everything fails, you can still deliver a powerful presentation."
+    }
+  ]
+};
+ 
+const badgeData = [
+  { name: "The Fearless Mind", icon: "🧠", earned: false },
+  { name: "The Magnetic Presence", icon: "⚡", earned: false },
+  { name: "The Master Orator", icon: "🎙", earned: false },
+  { name: "The Bulletproof Speaker", icon: "🛡", earned: false }
+];
+ 
+/* ══════════════════════════════════════════════════════════
+   QUIZ ENGINE
+══════════════════════════════════════════════════════════ */
+const quizState = { 1:{q:0,score:0,done:false}, 2:{q:0,score:0,done:false}, 3:{q:0,score:0,done:false}, 4:{q:0,score:0,done:false} };
+ 
+function buildQuiz(mod) {
+  const wrap = document.getElementById('quiz' + mod);
+  if (!wrap) return;
+  const data = quizData[mod];
+  const st = quizState[mod];
+ 
+  const dotsHtml = data.map((_,i) => `<div class="q-dot${i===st.q?' active':''}" id="qd${mod}_${i}"></div>`).join('');
+ 
+  if (st.done) {
+    const pct = Math.round(st.score/data.length*100);
+    const color = pct===100?'#2d7a4f':pct>=67?'#c9973a':'#c0303f';
+    const msgs = ['Keep reviewing this module and try again!','Good work — review the explanations above.','Great score! You are ready to move on.','Perfect! You have mastered this module.'];
+    const msgIdx = pct===100?3:pct>=67?2:pct>=33?1:0;
+    wrap.innerHTML = `<div class="quiz-result"><div style="font-size:0.65rem;letter-spacing:0.2em;text-transform:uppercase;color:var(--crimson);margin-bottom:0.5rem;">Quiz Complete</div><div class="result-score" style="color:${color}">${pct}%</div><div class="result-label">${st.score} / ${data.length} correct</div><div class="result-msg">${msgs[msgIdx]}</div><button class="btn-quiz-next show" style="margin-top:1.25rem;" onclick="resetQuiz(${mod})">↺ Retry Quiz</button></div>`;
+    return;
+  }
+ 
+  const q = data[st.q];
+  const letters = ['A','B','C','D'];
+  const optsHtml = q.opts.map((o,i)=>`<div class="q-opt" id="qo${mod}_${i}" onclick="selectAnswer(${mod},${i})"><div class="q-opt-letter">${letters[i]}</div><span>${o}</span></div>`).join('');
+ 
+  wrap.innerHTML = `
+    <div class="quiz-header">
+      <span class="quiz-tag">Knowledge Check · Module 0${mod}</span>
+      <div class="quiz-progress-dots">${dotsHtml}</div>
+    </div>
+    <div class="quiz-q">Q${st.q+1}. ${q.q}</div>
+    <div class="quiz-options">${optsHtml}</div>
+    <div class="quiz-feedback" id="qfb${mod}"></div>
+    <div class="quiz-nav">
+      <span class="quiz-score">Score: ${st.score}/${st.q}</span>
+      <button class="btn-quiz-next" id="qnext${mod}" onclick="nextQuestion(${mod})">Next →</button>
+    </div>`;
+}
+ 
+function selectAnswer(mod, idx) {
+  const st = quizState[mod];
+  const data = quizData[mod];
+  const q = data[st.q];
+  const opts = document.querySelectorAll(`[id^="qo${mod}_"]`);
+  opts.forEach(o => { o.classList.add('disabled'); });
+  const chosen = document.getElementById(`qo${mod}_${idx}`);
+  const correct = document.getElementById(`qo${mod}_${q.ans}`);
+  const fb = document.getElementById(`qfb${mod}`);
+  if (idx === q.ans) {
+    chosen.classList.add('correct');
+    st.score++;
+    fb.className = 'quiz-feedback show correct';
+    fb.textContent = '✓ ' + q.exp;
+  } else {
+    chosen.classList.add('wrong');
+    correct.classList.add('correct');
+    fb.className = 'quiz-feedback show wrong';
+    fb.textContent = '✗ Not quite. ' + q.exp;
+  }
+  const nextBtn = document.getElementById(`qnext${mod}`);
+  if (nextBtn) nextBtn.classList.add('show');
+}
+ 
+function nextQuestion(mod) {
+  const st = quizState[mod];
+  const data = quizData[mod];
+  st.q++;
+  if (st.q >= data.length) { st.done = true; updateMastery(); }
+  buildQuiz(mod);
+}
+ 
+function resetQuiz(mod) {
+  quizState[mod] = {q:0,score:0,done:false};
+  buildQuiz(mod);
+}
+ 
+/* ══════════════════════════════════════════════════════════
+   BADGES
+══════════════════════════════════════════════════════════ */
+function earnBadge(num) {
+  const icon = document.getElementById('badgeIcon' + num);
+  const btn = document.getElementById('badgeBtn' + num);
+  const msg = document.getElementById('badgeMsg' + num);
+  const fb = document.getElementById('fb' + num);
+ 
+  icon.classList.add('earned');
+  btn.disabled = true;
+  btn.textContent = '✦ Badge Earned';
+  msg.classList.add('show');
+  badgeData[num-1].earned = true;
+  if (fb) fb.classList.add('earned');
+ 
+  spawnConfetti();
+  updateMastery();
+  localStorage.setItem('badge_' + num, '1');
+}
+ 
+/* ══════════════════════════════════════════════════════════
+   MASTERY
+══════════════════════════════════════════════════════════ */
+function updateMastery() {
+  let score = 0;
+  const total = 16;
+  [1,2,3,4].forEach(m => {
+    if (quizState[m].done) score += 2;
+    if (badgeData[m-1].earned) score += 2;
+  });
+  const pct = Math.round(score/total*100);
+  document.getElementById('masteryVal').textContent = pct + '%';
+  document.getElementById('progressFill').style.width = pct + '%';
+}
+ 
+/* ══════════════════════════════════════════════════════════
+   BREATHING EXERCISE 1 (Box Breathing)
+══════════════════════════════════════════════════════════ */
+let breath1Active = false, breath1Interval = null, breath1Cycles = 0;
+const phases1 = [
+  {name:'Inhale',sec:4,cls:'inhale',color:'#c0303f'},
+  {name:'Hold',sec:4,cls:'hold',color:'#c9973a'},
+  {name:'Exhale',sec:4,cls:'exhale',color:'#2d7a4f'},
+  {name:'Hold',sec:4,cls:'hold2',color:'#555'}
+];
+let ph1=0, ct1=4;
+ 
+function toggleBreathing1() {
+  if (breath1Active) { pauseBreathing1(); }
+  else { startBreathing1(); }
+}
+ 
+function startBreathing1() {
+  breath1Active = true;
+  document.getElementById('breathBtn1').textContent = '⏸ Pause';
+  runBreath1Step();
+}
+ 
+function pauseBreathing1() {
+  breath1Active = false;
+  clearTimeout(breath1Interval);
+  document.getElementById('breathBtn1').textContent = '▶ Resume';
+}
+ 
+function runBreath1Step() {
+  if (!breath1Active) return;
+  const p = phases1[ph1];
+  const ring = document.getElementById('breathRing1');
+  ring.className = 'breath-ring ' + p.cls;
+  document.getElementById('bPhase1').textContent = p.name;
+  document.getElementById('bCount1').textContent = ct1;
+  ct1--;
+  if (ct1 < 0) {
+    ph1 = (ph1+1) % phases1.length;
+    ct1 = phases1[ph1].sec;
+    if (ph1 === 0) {
+      breath1Cycles++;
+      document.getElementById('breathCycles1').textContent = 'Cycles: ' + breath1Cycles + ' / 3';
+      if (breath1Cycles >= 3) { finishBreath1(); return; }
+    }
+  }
+  breath1Interval = setTimeout(runBreath1Step, 1000);
+}
+ 
+function finishBreath1() {
+  breath1Active = false;
+  const ring = document.getElementById('breathRing1');
+  ring.className = 'breath-ring';
+  document.getElementById('bPhase1').textContent = 'Done ✓';
+  document.getElementById('bCount1').textContent = '✓';
+  document.getElementById('bTimer1').textContent = '3 cycles complete!';
+  document.getElementById('breathBtn1').textContent = '▶ Restart';
+  document.getElementById('breathCycles1').textContent = 'Cycles: 3 / 3 ✓';
+  breath1Cycles = 0; ph1 = 0; ct1 = 4;
+}
+ 
+function resetBreathing1() {
+  clearTimeout(breath1Interval);
+  breath1Active = false; breath1Cycles = 0; ph1 = 0; ct1 = 4;
+  const ring = document.getElementById('breathRing1');
+  ring.className = 'breath-ring';
+  document.getElementById('bPhase1').textContent = 'Ready';
+  document.getElementById('bCount1').textContent = '—';
+  document.getElementById('bTimer1').textContent = 'Press Start';
+  document.getElementById('breathBtn1').textContent = '▶ Start';
+  document.getElementById('breathCycles1').textContent = 'Cycles: 0 / 3';
+}
+ 
+/* ══════════════════════════════════════════════════════════
+   3-PACE DRILL
+══════════════════════════════════════════════════════════ */
+let paceTimer=null, paceRunning=false, pacePhase=0;
+const paceLabels=['As fast as you can!','Painfully slow — feel every word','With emphasis — make it land'];
+const paceSecs=[25,60,40];
+const paceDone=[false,false,false];
+let currentPaceSec=0;
+ 
+function startPace(phase) {
+  clearInterval(paceTimer);
+  pacePhase = phase;
+  currentPaceSec = paceSecs[phase-1];
+  document.getElementById('paceDisplay').textContent = formatTime(currentPaceSec);
+  document.getElementById('pacePhaseLabel').textContent = paceLabels[phase-1];
+  [1,2,3].forEach(i=>{
+    const el=document.getElementById('pp'+i);
+    el.className='pace-phase-btn'+(paceDone[i-1]?' done':'')+(i===phase?' active':'');
+  });
+  paceRunning=true;
+  paceTimer = setInterval(()=>{
+    currentPaceSec--;
+    document.getElementById('paceDisplay').textContent = formatTime(currentPaceSec);
+    if(currentPaceSec<=0){
+      clearInterval(paceTimer); paceRunning=false;
+      paceDone[phase-1]=true;
+      document.getElementById('pp'+phase).className='pace-phase-btn done';
+      document.getElementById('pacePhaseLabel').textContent='Phase '+ phase+' complete! ✓';
+    }
+  },1000);
+}
+ 
+function resetPace(){
+  clearInterval(paceTimer); paceRunning=false;
+  [0,1,2].forEach(i=>paceDone[i]=false);
+  document.getElementById('paceDisplay').textContent='00:30';
+  document.getElementById('pacePhaseLabel').textContent='Select a phase to begin';
+  [1,2,3].forEach(i=>document.getElementById('pp'+i).className='pace-phase-btn');
+}
+ 
+function formatTime(s){ return String(Math.floor(s/60)).padStart(2,'0')+':'+String(s%60).padStart(2,'0'); }
+ 
+/* ══════════════════════════════════════════════════════════
+   CHECKLIST
+══════════════════════════════════════════════════════════ */
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+}
+ 
+/* ══════════════════════════════════════════════════════════
+   TONGUE TWISTERS
+══════════════════════════════════════════════════════════ */
+function selectTwister(el) {
+  document.querySelectorAll('.twister-card').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+}
+ 
+/* ══════════════════════════════════════════════════════════
+   INDEX CARD
+══════════════════════════════════════════════════════════ */
+function updateCardPreview(){
+  const v1=document.getElementById('ic1').value;
+  const v2=document.getElementById('ic2').value;
+  const v3=document.getElementById('ic3').value;
+  const p1=document.getElementById('icPrev1');
+  const p2=document.getElementById('icPrev2');
+  const p3=document.getElementById('icPrev3');
+  p1.style.fontStyle=v1?'normal':'italic'; p1.style.color=v1?'var(--navy)':'#9aabb8'; p1.textContent=v1||'Your first point will appear here...';
+  p2.style.fontStyle=v2?'normal':'italic'; p2.style.color=v2?'var(--navy)':'#9aabb8'; p2.textContent=v2||'Your second point will appear here...';
+  p3.style.fontStyle=v3?'normal':'italic'; p3.style.color=v3?'var(--navy)':'#9aabb8'; p3.textContent=v3||'Your third point will appear here...';
+}
+ 
+/* ══════════════════════════════════════════════════════════
+   REFLECTION
+══════════════════════════════════════════════════════════ */
+function updateCharCount(id, ccId){
+  const val=document.getElementById(id).value;
+  document.getElementById(ccId).textContent=val.length+' character'+(val.length!==1?'s':'');
+}
+function saveReflection(id,btnId){
+  const val=document.getElementById(id).value.trim();
+  if(!val){alert('Please write something before saving.');return;}
+  localStorage.setItem('ref_'+id, val);
+  const btn=document.getElementById(btnId);
+  if(btn){btn.textContent='✓ Saved'; btn.classList.add('saved'); setTimeout(()=>{btn.textContent='Save →'; btn.classList.remove('saved');},2000);}
+}
+ 
+/* ══════════════════════════════════════════════════════════
+   CONFETTI
+══════════════════════════════════════════════════════════ */
+const colors=['#c0303f','#c9973a','#2d7a4f','#3a7abc','#9b5de5','#f7c948'];
+function spawnConfetti(){
+  for(let i=0;i<60;i++){
+    const el=document.createElement('div');
+    el.className='confetti-piece';
+    el.style.left=Math.random()*100+'vw';
+    el.style.background=colors[Math.floor(Math.random()*colors.length)];
+    el.style.animationDuration=(Math.random()*2+1.5)+'s';
+    el.style.animationDelay=Math.random()*0.5+'s';
+    el.style.width=(Math.random()*8+4)+'px';
+    el.style.height=(Math.random()*8+4)+'px';
+    document.body.appendChild(el);
+    setTimeout(()=>el.remove(),(Math.random()*2+2)*1000);
+  }
+}
+ 
+/* ══════════════════════════════════════════════════════════
+   CERTIFICATE
+══════════════════════════════════════════════════════════ */
+function generateCertificate(){
+  const name=localStorage.getItem('studentName')||'Student';
+  document.getElementById('certNameDisplay').textContent=name;
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const d=new Date(); document.getElementById('certDate').textContent=d.getDate()+' '+months[d.getMonth()]+' '+d.getFullYear();
+  const badgeChips=badgeData.filter(b=>b.earned).map(b=>`<div class="cert-badge-chip">${b.icon} ${b.name}</div>`).join('');
+  document.getElementById('certBadgesRow').innerHTML=badgeChips||'<div class="cert-badge-chip">Workshop Participant</div>';
+  document.getElementById('certBox').classList.add('show');
+  spawnConfetti();
+  document.getElementById('certBox').scrollIntoView({behavior:'smooth', block:'center'});
+}
+ 
+/* ══════════════════════════════════════════════════════════
+   NAV DRAWER
+══════════════════════════════════════════════════════════ */
+document.getElementById('navToggle').addEventListener('click',()=>{
+  document.getElementById('drawer').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('show');
+});
+ 
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('overlay').classList.remove('show');
+}
+ 
+/* Scroll to section with fixed-header offset, then close drawer */
+function scrollToSection(id){
+  closeDrawer();
+  const el = document.getElementById(id);
+  if (!el) return;
+  const offset = 66; // header 60px + progress strip 3px + 3px breathing room
+  const top = el.getBoundingClientRect().top + window.pageYOffset - offset;
+  window.scrollTo({ top, behavior: 'smooth' });
+}
+ 
+/* Highlight active nav item as user scrolls */
+(function(){
+  const sections = ['hero','module1','module2','module3','module4','final'];
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        sections.forEach(s => {
+          const navEl = document.getElementById('nav-' + s);
+          if (navEl) navEl.classList.toggle('active', s === id);
+        });
+        // Mark completed modules in dot
+        ['module1','module2','module3','module4'].forEach((s,i)=>{
+          const dot = document.getElementById('ndot'+(i+1));
+          if (dot && badgeData[i].earned) {
+            dot.textContent = '✓';
+            document.getElementById('nav-'+s).classList.add('done');
+          }
+        });
+      }
+    });
+  }, { rootMargin: '-20% 0px -60% 0px', threshold: 0 });
+ 
+  window.addEventListener('DOMContentLoaded', ()=>{
+    sections.forEach(s => {
+      const el = document.getElementById(s);
+      if (el) observer.observe(el);
+    });
+  });
+})();
+ 
+/* ══════════════════════════════════════════════════════════
+   MODAL: START WORKSHOP
+══════════════════════════════════════════════════════════ */
+function startWorkshop(){
+  const name=document.getElementById('studentName').value.trim();
+  if(!name){document.getElementById('studentName').style.borderColor='var(--crimson)'; return;}
+  localStorage.setItem('studentName',name);
+  document.getElementById('nameModal').classList.remove('show');
+  scrollToSection('hero');
+}
+document.getElementById('studentName').addEventListener('keydown',e=>{if(e.key==='Enter')startWorkshop();});
+ 
+/* ══════════════════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════════════════ */
+window.addEventListener('DOMContentLoaded', ()=>{
+  // Restore name if previously entered
+  const saved = localStorage.getItem('studentName');
+  if(saved){ document.getElementById('studentName').value=saved; }
+ 
+  // Restore badges
+  [1,2,3,4].forEach(n=>{
+    if(localStorage.getItem('badge_'+n)==='1') {
+      badgeData[n-1].earned=true;
+      const icon=document.getElementById('badgeIcon'+n);
+      if(icon) icon.classList.add('earned');
+      const btn=document.getElementById('badgeBtn'+n);
+      if(btn){ btn.disabled=true; btn.textContent='✦ Badge Earned'; }
+      const msg=document.getElementById('badgeMsg'+n);
+      if(msg) msg.classList.add('show');
+      const fb=document.getElementById('fb'+n);
+      if(fb) fb.classList.add('earned');
+    }
+  });
+ 
+  // Restore reflections
+  ['ref1','ref2','ref3','ref4'].forEach((id,i)=>{
+    const val=localStorage.getItem(id);
+    const el=document.getElementById(id);
+    if(el && val){ el.value=val; updateCharCount(id,'cc'+(i+1)); }
+  });
+ 
+  // Build quizzes
+  [1,2,3,4].forEach(buildQuiz);
+ 
+  updateMastery();
+});
+</script>
+</body>
+</html>
